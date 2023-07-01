@@ -4,6 +4,8 @@ import createServerSupabase from "utils/supabase.server";
 
 import { json, type LoaderArgs } from "@remix-run/node";
 import Login from "components/login";
+import { useEffect } from "react";
+import RealtimeMessages from "components/realtime-messages";
 
 export const action = async({request}: ActionArgs) => {
   const response = new Response();
@@ -43,11 +45,13 @@ export const meta: V2_MetaFunction = () => {
 
 export default function Index() {
   // Hook, type inferred from return type of loader()
+  // When is this hook called?
   const { messages } = useLoaderData<typeof loader>();
+
   return (
     <>
       <Login />
-      <pre>{JSON.stringify(messages, null, 2)}</pre>
+      <RealtimeMessages serverMessages={messages}/>
       <Form method="post">
         <input type="text" name="message" />
         <button type="submit">Send</button>

@@ -62,12 +62,14 @@ export default function App() {
 
   const serverAccessToken = session?.access_token;
 
+  // if user logs in in another browser, gets stuck in a loop of revalidating
   useEffect(() => {
     const {data: {subscription}} =
     supabase.auth.onAuthStateChange((event, session) => {
       if (session?.access_token !== serverAccessToken) {
         // call loaders
         revalidator.revalidate();
+        console.log("revalidating");
       }
     })
 
